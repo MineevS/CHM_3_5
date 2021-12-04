@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1080</width>
-    <height>978</height>
+    <height>1847</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -99,7 +99,7 @@
       <x>40</x>
       <y>80</y>
       <width>391</width>
-      <height>361</height>
+      <height>271</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_1">
@@ -182,8 +182,8 @@
      <rect>
       <x>490</x>
       <y>80</y>
-      <width>271</width>
-      <height>361</height>
+      <width>231</width>
+      <height>271</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_4">
@@ -268,9 +268,9 @@
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>510</y>
+      <y>420</y>
       <width>1001</width>
-      <height>411</height>
+      <height>1361</height>
      </rect>
     </property>
     <property name="layoutDirection">
@@ -288,7 +288,7 @@
        <x>0</x>
        <y>0</y>
        <width>999</width>
-       <height>409</height>
+       <height>1359</height>
       </rect>
      </property>
      <widget class="QTextBrowser" name="textBrowser_1">
@@ -297,7 +297,7 @@
         <x>0</x>
         <y>0</y>
         <width>1001</width>
-        <height>411</height>
+        <height>1361</height>
        </rect>
       </property>
      </widget>
@@ -306,8 +306,8 @@
    <widget class="QPushButton" name="pushButton_2">
     <property name="geometry">
      <rect>
-      <x>610</x>
-      <y>470</y>
+      <x>520</x>
+      <y>380</y>
       <width>80</width>
       <height>21</height>
      </rect>
@@ -325,10 +325,10 @@
    <widget class="QWidget" name="gridLayoutWidget_4">
     <property name="geometry">
      <rect>
-      <x>820</x>
+      <x>790</x>
       <y>80</y>
-      <width>161</width>
-      <height>361</height>
+      <width>151</width>
+      <height>271</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_7">

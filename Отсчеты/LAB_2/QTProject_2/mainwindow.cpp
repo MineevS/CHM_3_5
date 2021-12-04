@@ -34,7 +34,7 @@ void MainWindow::func_X()
             {3}
         };*/
 
-        double vecA[4][4] = {
+        /*double vecA[4][4] = {
             {3,1,-1,2},
             {-5,1,3,-4},
             {2,0,1,-1},
@@ -46,6 +46,20 @@ void MainWindow::func_X()
             {-12},
             {1},
             {3}
+        };*/
+
+        double vecA[4][4] = {
+            {4,2,-1,0.5},
+            {1,-5,2,1},
+            {2,1,-4,-1.5},
+            {1,-0.4,0.8,-3}
+        };
+
+        double vecB[4][1] = {
+            {4.5},
+            {14},
+            {-27.5},
+            {-1.8}
         };
 
         if(qElem_s_1.count() == 4){
@@ -314,62 +328,39 @@ void MainWindow::on_pushButton_2_clicked()
     }
 
     /////////////////////////////////////////////
-    /////////////////////////////////////////////
-
     this->ORD = ui->spinBox_1->value();
-
     QVector<QVector<double>> u(ORD, QVector<double>(ORD, 0));
     QVector<QVector<double>> c(ORD, QVector<double>(ORD, 0));
     QVector<bool> fLAG_s_Ethread(2, true);
-
     U = u;
     C = c;
-
     FLAG_s_Ethread = fLAG_s_Ethread;
-
     thread_1 = new EThread("thread 1", 1, *this);
     thread_2 = new EThread("thread 2", 2, *this);
-
     thread_1->start(QThread::TimeCriticalPriority);
     thread_2->start(QThread::TimeCriticalPriority);
-
-
     while(thread_1->isRunning() || thread_2->isRunning()){
         SuspendThread(MainWindow::thread());
     }
-
-    //this->FLAG_s_Ethread[0]
-
     if(FLAG_s_Ethread[0] && FLAG_s_Ethread[1]){
         qDebug() << "Матрицы U и C посчитаны успешно !";
     }
-
     ui->textBrowser_1->setHtml(ui->textBrowser_1->toHtml() + "<b>U:</b>");
     PrintMatrix_2(U);
     ui->textBrowser_1->setHtml(ui->textBrowser_1->toHtml() + "<b>C:</b>");
     PrintMatrix_2(C);
-
     QVector<double> y(ORD, 0);
     QVector<double> x(ORD, 0);
-
     Y = y;
     X = x;
-
     for(size_t i = 0; i< ORD; i++){
         if(i == 0){
             Y[i] = setNewValue(qElem_s_2[i].qLineEdit->text()) / (U[i][i]);
         }else{
             auto SUMM = [this, i](auto& summ,int start, int end) -> double{
-
                 if(start > end) return 0;
-
                 return U[i][start]*Y[start] + summ(summ,start + 1, end);
             };
-
-            //qDebug() << setNewValue(qElem_s_2[i].qLineEdit->text());
-            //qDebug() << SUMM(SUMM,0, i - 1);
-            //qDebug() << U[i][i];
-
             Y[i] = (setNewValue(qElem_s_2[i].qLineEdit->text()) - SUMM(SUMM,0, i - 1))/(U[i][i]);
         }
     }
@@ -382,15 +373,9 @@ void MainWindow::on_pushButton_2_clicked()
             X[i] = Y[i];
         }else{
             auto SUMM = [this, i](auto& summ,int start, int end) -> double{
-
                 if(start > end) return 0;
-
                 return C[i][start]*X[start] + summ(summ,start + 1, end);
             };
-
-            //qDebug() << setNewValue(qElem_s_2[i].qLineEdit->text());
-            //qDebug() << SUMM(SUMM,i, ORD-1);
-            //qDebug() << Y[i];
 
             X[i] = Y[i] - SUMM(SUMM,i, ORD-1);
         }

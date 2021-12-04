@@ -34,7 +34,7 @@ void MainWindow::func_X()
             {3}
         };*/
 
-        double vecA[4][4] = {
+        /*double vecA[4][4] = {
             {2,3,-4,1},
             {1,-2,-5,1},
             {5,-3,1,-4},
@@ -46,7 +46,22 @@ void MainWindow::func_X()
             {2},
             {1},
             {-4}
+        };*/
+
+        double vecA[4][4] = {
+            {4,2,-1,0.5},
+            {1,-5,2,1},
+            {2,1,-4,-1.5},
+            {1,-0.4,0.8,-3}
         };
+
+        double vecB[4][1] = {
+            {4.5},
+            {14},
+            {-27.5},
+            {-1.8}
+        };
+
 
         double eps = 0.01;
 
@@ -354,6 +369,7 @@ void MainWindow::on_pushButton_2_clicked()
     PrintMatrix_1(B);
     /////////////////////////////////////////////
 
+    // Метод прибовления к матрице константы.
     auto F_2_1 = [](QVector<QVector<double>>& M,double value) -> QVector<QVector<double>> {
 
         QVector<QVector<double>> m;
@@ -373,6 +389,7 @@ void MainWindow::on_pushButton_2_clicked()
         return m;
     };
 
+    // Метод умножения матрице на константу.
     auto F_1_2 = [this](QVector<double>& M, double value) -> QVector<double> {
 
         QVector<double> m;
@@ -385,6 +402,7 @@ void MainWindow::on_pushButton_2_clicked()
         return m;
     };
 
+    // Метод сложения двух матриц.
     auto F_1_5 = [this](QVector<double>& M,QVector<double>& N) -> QVector<double> {
 
         QVector<double> m;
@@ -397,72 +415,22 @@ void MainWindow::on_pushButton_2_clicked()
         return m;
     };
 
-    auto F_2_3 = [this](QVector<QVector<double>>& M, double value) -> QVector<QVector<double>> {
+    // Метод транспонирования:
+    auto T = [](QVector<QVector<double>>& M) -> QVector<QVector<double>> {
 
-        QVector<QVector<double>> m;
+        QVector<QVector<double>> tM(M.count(), QVector<double>(M.count(),0));
 
-        foreach(auto row, M){
-            QVector<double> m_ik(row.count() / 8);
-
-            foreach(auto elem, row){
-
-                m_ik.push_back(elem / value);
-            };
-
-            m.push_back(m_ik);
-        };
-
-        return m;
-    };
-
-    auto F_1_3 = [this](QVector<double>& M, double value) -> QVector<double> {
-
-        QVector<double> m;
-
-        foreach(auto elem, M){
-
-            m.push_back(elem / value);
-        };
-
-        return m;
-    };
-/*
-    auto F_1_6 = [this](double M, qint16 value) -> double {
-
-        return M * (double)value;
-    };
-*/
-    /*auto F_2_4 = [this](QVector<QVector<double>>& M, QVector<QVector<double>>& N) -> QVector<QVector<double>> {
-
-        QVector<QVector<double>> m(ORD, QVector<double>(ORD,0));
-
-
-        for(size_t i = 0; i < ORD; i++){
-            for(size_t j = 0; j < ORD; j++){
-                //m[i][j] = 0;
-                for(size_t k = 0; k < ORD; k++){
-                    m[i][j] += M[i][k]*N[k][j];
-                }
+        for(size_t i = 0; i < M.count(); i++){
+            for(size_t j = 0; j < M.count(); j++){
+                tM[i][j] = M[j][i];
             }
-
         }
-
-        return m;
-    };*/
+        return tM;
+    };
 
     auto norm_m_1 = [](QVector<QVector<double>>& M) -> double {
 
         auto V = [&](QVector<QVector<double>>& M) -> QVector<double> {
-
-            /* auto summ_a = [](QVector<double> M) -> double {
-                  int x = 0;
-
-                 for(size_t j = 0; j < M.count(); j++){
-                     x += M[j];
-                 }
-
-                 return x;
-             };*/
 
             auto summ_b = [](auto summ_b, QVector<double> M, size_t k) -> double {
 
@@ -489,34 +457,12 @@ void MainWindow::on_pushButton_2_clicked()
 
         return max(V(M));
     };
-    auto norm_i_1 = [](QVector<QVector<double>>& M) -> double {
+    auto norm_i_1 = [&](QVector<QVector<double>>& M) -> double {
 
         auto V = [&](QVector<QVector<double>>& M) -> QVector<double> {
 
-            auto T = [](QVector<QVector<double>>& M) -> QVector<QVector<double>> {
-
-                QVector<QVector<double>> tM(M.count(), QVector<double>(M.count(),0));
-
-                for(size_t i = 0; i < M.count(); i++){
-                    for(size_t j = 0; j < M.count(); j++){
-                        tM[i][j] = M[j][i];
-                    }
-                }
-
-                return tM;
-            };
 
             QVector<QVector<double>> Tm = T(M);
-
-            /* auto summ_a = [](QVector<double> M) -> double {
-                  int x = 0;
-
-                 for(size_t j = 0; j < M.count(); j++){
-                     x += M[j];
-                 }
-
-                 return x;
-             };*/
 
             auto summ_b = [](auto summ_b, QVector<double> M, size_t k) -> double {
 
@@ -560,13 +506,6 @@ void MainWindow::on_pushButton_2_clicked()
     double norm_m(1), norm_i(1), norm_k(1);
 
     QVector<QVector<double>> R;
-    //QVector<QVector<double>> W;
-    //QVector<QVector<double>> G;
-
-    //QVector<QVector<double>> Q;
-    //QVector<QVector<double>> S;
-    //QVector<QVector<double>> D;
-
     QVector<double> r;
 
     double ip = 0;
@@ -574,10 +513,11 @@ void MainWindow::on_pushButton_2_clicked()
 
     Count = count;
 
-    auto F_1_4 = [](QVector<QVector<double>>& M, QVector<double>& N,QVector<bool>& count) -> void {
-
-        auto SummAbs = [](QVector<double>& M, qint16 k) -> double {
-            qint16 x(0);
+    // Метод сортировки строк матрицы в зависимости от того чтобы
+    // на главной диагонали по возможности был максимальный элемент по отношению к элементам соответствующей строи/столбца.
+    auto F_1_4 = [&](QVector<QVector<double>>& M, QVector<double>& N,QVector<bool>& count) -> void {
+        auto SummAbs_i = [](QVector<double>& M, qint16 k) -> double {
+            double x(0);
 
             for(size_t i = 0; i < M.count(); i++){
 
@@ -585,37 +525,83 @@ void MainWindow::on_pushButton_2_clicked()
                     x += qAbs(M[i]);
                 }
             }
-
             return x;
-
         };
 
-        //QVector<double> m;
+        auto SummAbs_j = [](QVector<double>& M, qint16 k) -> double {
+            double x(0);
+
+            for(size_t i = 0; i < M.count(); i++){
+
+                if(i != k){
+                    x += qAbs(M[i]);
+                }
+            }
+            return x;
+        };
 
         for(size_t i = 0; i < M.count(); i++){
-
-          for(size_t j = 0; j < M[i].count(); j++){
-
-                if(qAbs(M[j][i]) > SummAbs(M[j], i)){
-
-                    qDebug() << j  << " : "  << i<< " : " << M[j][i] << " : " << SummAbs(M[j], i) << " : " << "\033[32m" << true << "\033[0m";
+            for(size_t j = 0; j < M[i].count(); j++){
+                if(( qAbs(M[j][i]) > SummAbs_i(M[j], i) ) && (qAbs(M[j][i]) > SummAbs_j(T(M)[j], i))){
+                    qDebug() << j  << " : "  << i<< " : " << M[j][i] << " : " << SummAbs_i(M[j], i) << " : " << SummAbs_j(T(M)[j], j) << " : "<< "\033[32m" << true << "\033[0m";
 
                     count[i] = true;
 
                     std::swap(M[i], M[j]);
                     std::swap(N[i], N[j]);
-
                 }else{
-                    qDebug() << j  << " : "  << i << " : "  << M[j][i] << " : " << SummAbs(M[j], i) << " : " << false;
+                    qDebug() << j  << " : "  << i << " : "  << M[j][i] << " : " << SummAbs_i(M[j], i) << " : " << SummAbs_j(T(M)[j], j) << " : " << false;
                 }
+            }
         }
-
-        }
-
         return;
     };
 
-    F_1_4(A, B,count);
+    // Менее требовательная функция к столбцам матрицы.
+    auto F_1_4_2 = [&](QVector<QVector<double>>& M, QVector<double>& N,QVector<bool>& count) -> void {
+        auto SummAbs_i = [](QVector<double>& M, qint16 k) -> double {
+            double x(0);
+
+            for(size_t i = 0; i < M.count(); i++){
+
+                if(i != k){
+                    x += qAbs(M[i]);
+                }
+            }
+            return x;
+        };
+
+
+        auto SummAbs_j = [](QVector<double>& M, qint16 k) -> double {
+            double x(0);
+
+            for(size_t i = 0; i < M.count(); i++){
+
+                if(i != k){
+                    x += qAbs(M[i]);
+                }
+            }
+            return x;
+        };
+
+        for(size_t i = 0; i < M.count(); i++){
+            for(size_t j = 0; j < M[i].count(); j++){
+                if(qAbs(M[j][i]) > SummAbs_i(M[j], i)){
+                    qDebug() << j  << " : "  << i<< " : " << M[j][i] << " : " << SummAbs_i(M[j], i) << " : " << SummAbs_j(T(M)[j], j) << " : "<< "\033[32m" << true << "\033[0m";
+
+                    count[i] = true;
+
+                    std::swap(M[i], M[j]);
+                    std::swap(N[i], N[j]);
+                }else{
+                    qDebug() << j  << " : "  << i << " : "  << M[j][i] << " : " << SummAbs_i(M[j], i) << " : " << SummAbs_j(T(M)[j], j) << " : " << false;
+                }
+            }
+        }
+        return;
+    };
+
+    F_1_4(A, B, count);
 
     ui->textBrowser_1->setHtml(ui->textBrowser_1->toHtml() + "<b>A:</b>");
     PrintMatrix_2(A);
@@ -625,6 +611,7 @@ void MainWindow::on_pushButton_2_clicked()
 
     F_1_4(A, B, count);
 
+    // Метод проверки наличия строк для которых невыполняется условие (2.4)
     auto Cou = [&]()-> bool {
         bool x = false;
         foreach(auto elem, Count){
@@ -635,13 +622,13 @@ void MainWindow::on_pushButton_2_clicked()
 
     Count = count;
 
+    // Метод сортировки строк в зависимости от наличия на главной диагонали
+    // максимального по модулю элемента по стравнению с элементами в строке.
     auto F_1_7 = [](QVector<QVector<double>>& M, QVector<double>& N, QVector<bool>& count) -> void {
         for(size_t i = 0; i < M.count(); i++){
-
             if(!count[i]){
                 for(size_t j = 0; j < M.count(); j++){
                     if(!count[j]){
-
                         if(qAbs(M[i][j]) < qAbs(M[j][i])){
                             std::swap(M[i], M[j]);
                             std::swap(N[i], N[j]);
@@ -660,23 +647,29 @@ void MainWindow::on_pushButton_2_clicked()
     ui->textBrowser_1->setHtml(ui->textBrowser_1->toHtml() + "<b>B:</b>");
     PrintMatrix_1(B);
 
-    F_1_4(A, B, count);
+    F_1_4_2(A, B, count);
 
+    ui->textBrowser_1->setHtml(ui->textBrowser_1->toHtml() + "<hr>");
+
+    Count = count;
+
+    QVector<QVector<double>> origin_A = A;
+    QVector<double> origin_B = B;
+    // Цикл элементарных преобразований(диагонализации) по строке для строк, которые не выполняется условие (2.4).
     while(Cou())
     {
         for(size_t i = 0; i < Count.count(); i++){
             if(!Count[i]){
-                QVector<qint16> H(A[i].count(),0);
 
+                QVector<qint16> H(A[i].count(),0);
                 QVector<quint16> h(A[i].count(), 0);
 
                 h[i] = 1;
 
-                quint16 MAX = 10;
-
+                quint16 MAX = 4;
                 QVector<size_t> ITER_BUFF_F(A[i].count(), 0);
 
-                auto ITER_F = [&](auto iter_f, QVector<size_t>& iter_buff_f, size_t f) -> void {
+                auto ITER_F = [&, this](auto iter_f, QVector<size_t>& iter_buff_f, size_t f) -> void {
 
                         if(f == 0)
                         {
@@ -694,17 +687,18 @@ void MainWindow::on_pushButton_2_clicked()
 
                                         auto iterat_A = [&](auto it, QVector<qint16> H, int i) -> QVector<double> {
 
-                                            // qDebug() << "033\[31m" << H.count() << "033[0m";
-
                                              if(i >= H.count()) return QVector<double>(A[i-1].count(), 0);
 
-                                              QVector<double> F12 = F_1_2(A[i], H[i]);
+                                              QVector<double> F12 = F_1_2(origin_A[i], H[i]);//origin_A
                                               QVector<double> It = it(it, H, i + 1);
 
                                               return F_1_5( F12 , It);
                                          };
 
                                         C = iterat_A(iterat_A, H, 0);
+
+                                        if(C[3] == -9 && C[0] == 3)
+                                            qDebug() << "C: " << C[0] << "; " << C[1] << "; " <<C[2] << "; " << C[3] << "\n";
 
                                         auto SummAbs = [](QVector<double>& M, qint16 k) -> double {
                                            qint16 x(0);
@@ -719,9 +713,104 @@ void MainWindow::on_pushButton_2_clicked()
                                            return x;
                                         };
 
+                                        auto T = [](QVector<QVector<double>>& M) -> QVector<QVector<double>> {
+
+                                            QVector<QVector<double>> tM(M.count(), QVector<double>(M.count(),0));
+
+                                            for(size_t i = 0; i < M.count(); i++){
+                                                for(size_t j = 0; j < M.count(); j++){
+                                                    tM[i][j] = M[j][i];
+                                                }
+                                            }
+                                            return tM;
+                                        };
+
+                                        auto STEG = [](QVector<bool> Count) -> int{
+                                            int x = Count.count() - 1;
+
+                                            for(int i = Count.count() - 1; Count[i] && (i >= 0); --i){
+                                                x--;
+                                            }
+                                            return x;
+                                        };
+
+                                        auto PRED = [&](QVector<QVector<double>>& M, QVector<double>& N, int k) -> bool{
+                                            bool FLG_1 = false;
+                                            for(int i = 0; i < N.count(); i++){
+                                                QVector<QVector<double>> n = T(M);
+
+                                                if(i != k){
+
+                                                    int xd = SummAbs(n[i], k) - qAbs(M[i][i]) + qAbs(N[i]);
+
+                                                    if((xd) >= qAbs(M[i][i])){
+                                                        return false;
+                                                    }
+
+                                                }else if(i == k){
+
+                                                        if(qAbs(N[i]) > SummAbs(n[i], k)){
+
+                                                            FLG_1 = true;
+                                                            return FLG_1;
+
+                                                        }
+                                                    }
+
+                                                }
+                                            return FLG_1;
+                                        };
+
+
                                         if(C.count() > 0)
                                         {
-                                           if(qAbs(C[i]) > SummAbs(C, i)){
+                                            qDebug() << SummAbs(C, i);
+                                            qDebug() << STEG(Count);
+
+                                           if((i == STEG(Count)) && (qAbs(C[i]) > SummAbs(C, i)) ){
+
+                                               if((PRED(A, C, i))){
+
+                                                   auto F_1_6 = [&](QVector<double>& M, QVector<double>& N) -> void {
+
+                                                       for(size_t u = 0; u < C.count() ; u++){
+                                                           M[u] = N[u];
+                                                       };
+                                                   };
+
+                                                   auto iterat_B = [&](auto it, QVector<qint16> H, qint16 j, size_t i) -> double {
+
+                                                          if(i >= B.count()) return 0;
+
+                                                           B[j] = origin_B[i] * H[i] + it(it,H,j, i + 1);
+
+                                                       return B[j];
+                                                   };
+
+                                                   iterat_B(iterat_B, H, i, 0);
+
+                                                   // Получение в консоли информации к какой строке какие коэффициенты
+                                                   //  были применены для достижения в строке изсеняемой диагонализированного вида.
+                                                   qDebug() << "H[0] : " << H[0];
+                                                   qDebug() << "H[1] : " << H[1];
+                                                   qDebug() << "H[2] : " << H[2];
+                                                   qDebug() << "H[3] : " << H[3];
+
+                                                   F_1_6(A[i] , C);
+
+                                                   Count[i] = true;
+                                               }else{
+
+                                                   qDebug() << "H[0] : " << H[0];
+                                                   qDebug() << "H[1] : " << H[1];
+                                                   qDebug() << "H[2] : " << H[2];
+                                                   qDebug() << "H[3] : " << H[3];
+
+                                                   qDebug() << "При итерации не удалось найти решение";
+                                               }
+
+                                           }else if(qAbs(C[i]) > SummAbs(C, i) ){//&& (qAbs(C[i]) > SummAbs(T(A)[i], i))
+
 
                                                auto F_1_6 = [&](QVector<double>& M, QVector<double>& N) -> void {
 
@@ -732,8 +821,6 @@ void MainWindow::on_pushButton_2_clicked()
 
                                                auto iterat_B = [&](auto it, QVector<qint16> H, qint16 j, size_t i) -> double {
 
-                                                 // qDebug() << "033\[31m" << H.count() << "033[0m";
-
                                                       if(i >= B.count()) return 0;
 
                                                        B[j] = B[i] * H[i] + it(it,H,j, i + 1);
@@ -743,6 +830,8 @@ void MainWindow::on_pushButton_2_clicked()
 
                                                iterat_B(iterat_B, H, i, 0);
 
+                                               // Получение в консоли информации к какой строке какие коэффициенты
+                                               //  были применены для достижения в строке изсеняемой диагонализированного вида.
                                                qDebug() << "H[0] : " << H[0];
                                                qDebug() << "H[1] : " << H[1];
                                                qDebug() << "H[2] : " << H[2];
@@ -750,15 +839,13 @@ void MainWindow::on_pushButton_2_clicked()
 
                                                F_1_6(A[i] , C);
 
-                                               //F_1_6(B , D);
-
                                                Count[i] = true;
                                            }
                                         }
 
                                     }else {
 
-                                        for(int s = -1; (!Count[i]) && (s < 2); s+=2)
+                                        for(int s = 1; (!Count[i]) && (s > (-2)); s-=2)
                                         {
                                             iter_buff_d[di - 1] = s;
 
@@ -785,85 +872,10 @@ void MainWindow::on_pushButton_2_clicked()
         if(Cou()){
             qDebug() << "Программа не смогла деагонализировать матрицу. "
                         "Попробуйте увеличить глубину ассоциативности, указав значение выше "
-                        "установленного в переменной MAX, строки кода:  [673].";
+                        "установленного в переменной MAX, строки кода:  [668].";
             exit(0);
         };
     };
-
-
-    /*
-while(ip < 2){
-    ip += 0.1;
-    Q = F_2_2(A, -1);// (-1)*A;
-    S = F_2_1(Q, ip);// 1 + (-1)*A= 1 - A;
-    D = F_2_3(S, ip);
-
-    ui->textBrowser_1->setHtml(ui->textBrowser_1->toHtml() + "<b>Q:</b>");
-    PrintMatrix_2(Q);
-
-    ui->textBrowser_1->setHtml(ui->textBrowser_1->toHtml() + "<b>S:</b>");
-    PrintMatrix_2(S);
-
-    ui->textBrowser_1->setHtml(ui->textBrowser_1->toHtml() + "<b>D:</b>");
-    PrintMatrix_2(D);
-}
-
-
-
-    for(size_t i = 0; i < D.count(); i++){
-        if(D[i][i] == 0){
-            qDebug() << "Матрица для данного метода простых иттераций не подходит!";
-            break;
-        }else{
-            R.push_back(F_1_3(D[i], - D[i][i]));
-            r.push_back(B[i] / D[i][i]);
-        }
-    }
-
-    for(size_t i = 0; i < R.count(); i++){
-        R[i][i] = 0;
-    }
-
-    ui->textBrowser_1->setHtml(ui->textBrowser_1->toHtml() + "<b>R:</b>");
-    PrintMatrix_2(R);
-    ui->textBrowser_1->setHtml(ui->textBrowser_1->toHtml() + "<b>r:</b>");
-    PrintMatrix_1(r);
-
-    norm_m = norm_m_1(R);
-    norm_i = norm_i_1(R);
-    norm_k = norm_k_1(R);
-    */
-
-    /*
-
-    while((norm_m >= 1) || (norm_i >= 1) || (norm_k >= 1)){
-        ++i;
-
-        ui->textBrowser_1->setHtml(ui->textBrowser_1->toHtml() + "<b style = \"color: red;\" > " + QString::number(i) + " </b>");
-
-        W = F_2_2(A, -1);// (-1)*A;
-        R = F_2_1(W, i);// 1 + (-1)*A= 1 - A;
-
-        G = F_2_3(A, i);
-
-        ui->textBrowser_1->setHtml(ui->textBrowser_1->toHtml() + "<b>W:</b>");
-        PrintMatrix_2(W);
-
-        ui->textBrowser_1->setHtml(ui->textBrowser_1->toHtml() + "<b>R:</b>");
-        PrintMatrix_2(R);
-
-        ui->textBrowser_1->setHtml(ui->textBrowser_1->toHtml() + "<b>G:</b>");
-        PrintMatrix_2(G);
-
-
-        norm_m = norm_m_1(G);
-        norm_i = norm_i_1(G);
-        norm_k = norm_k_1(G);
-
-        //qDebug() << norm_m;
-        //qDebug() << norm_i;
-        //qDebug() << norm_k;
-    }*/
 
     ui->textBrowser_1->setHtml(ui->textBrowser_1->toHtml() + "<b>A:</b>");
     PrintMatrix_2(A);
@@ -872,7 +884,7 @@ while(ip < 2){
     PrintMatrix_1(B);
 
     ////////////////////////////////////
-
+    // Метод выражения элементов матрицы в зависимости от элементов, стоящих на главной диагонали.
     auto F_2_2 = [](QVector<QVector<double>>& M) -> QVector<QVector<double>> {
          QVector<QVector<double>> m;
 
@@ -899,6 +911,7 @@ while(ip < 2){
     ui->textBrowser_1->setHtml(ui->textBrowser_1->toHtml() + "<b>R:</b>");
     PrintMatrix_2(R);
 
+    // Метод деления элементов матрицы по строке на соответствующий элемент, стоящий на главной диагонали.
     auto F_2_7 = [&](QVector<double> M) -> QVector<double>{
             QVector<double> m(M.count(),0);
 
@@ -925,7 +938,6 @@ while(ip < 2){
     qDebug() << norm_k;
 
     ui->textBrowser_1->setHtml(ui->textBrowser_1->toHtml() + "<b>Норма m: </b>" + QString::number(norm_m));
-     //ui->textBrowser_1->setHtml(ui->textBrowser_1->toHtml() + "< 1;");
     ui->textBrowser_1->setHtml(ui->textBrowser_1->toHtml() + "<b>Норма i: </b>" + QString::number(norm_i) + "< 1;");
     ui->textBrowser_1->setHtml(ui->textBrowser_1->toHtml() + "<b>Норма k: </b>" + QString::number(norm_k) + "< 1;");
 
@@ -936,17 +948,15 @@ while(ip < 2){
     QVector<double> x_j(B.count(), 0);
 
     double eps = Epsilon.qLineEdit->text().toDouble();
-    bool FLG = false;
 
+    // Метод проверки выхода из цикла итерации по достижению точности.
     auto FAb = [&](QVector<double>& M, QVector<double>& N, double& eps) -> bool {
         bool flg = false;
-
         for(size_t i = 0; i < M.count(); i++){
             if(fabs(M[i] - N[i]) >= eps){
                 flg = true;
             }
         }
-
         return flg;
     };
 
@@ -955,34 +965,37 @@ while(ip < 2){
     do{
         if(counter == 0){
             x_i = x_0;
-
         }else{
             x_i = x_j;
         }
+
         counter++;
 
-        for(size_t k = 0; k < x_j.count(); k++)
-        {
-            auto SUMM = [&](auto summ,QVector<QVector<double>>& M,QVector<double>& N, size_t start) -> double {
+        auto FAST = [](QVector<QVector<double>>& M,QVector<double>& x_i,QVector<double>& b){
 
-                    if(start == M.count()){
+            auto SUMM = [](QVector<double>& m_i, QVector<double>& x_i) -> double {
+                double x = 0;
+                for(int i = 0; i < x_i.count(); i++){
+                    x += m_i[i]*x_i[i];
+                }
 
-                        return 0;
-                    }else if(k == start){
-
-                        return 0 + summ(summ, M , N, start + 1);
-                    }else{
-
-                        return M[k][start]*N[start] + summ(summ, M , N, start + 1);
-                    }
+                return x;
             };
 
-            x_j[k] = R[k][k] - SUMM(SUMM, R, x_i, 0);
-        }
+            QVector<double> d(x_i.count(), 0);
 
-        FLG = FAb(x_i, x_j, eps);
+            for(int i = 0; i < x_i.count(); i++){
+                d[i] = SUMM(M[i], x_i) + b[i];
+            }
 
-    } while(FLG);
+            return d;
+        };
+
+        x_j = FAST(R, x_i, r);
+
+    } while(FAb(x_i, x_j, eps));
+
+    ///////////////////////////////////////
 
     ui->textBrowser_1->setHtml(ui->textBrowser_1->toHtml() + "<b>Ответ: </b>");
     ui->textBrowser_1->setHtml(ui->textBrowser_1->toHtml() + "<b>x: </b>");
@@ -990,10 +1003,10 @@ while(ip < 2){
 
     ui->textBrowser_1->setHtml(ui->textBrowser_1->toHtml() + "<b>Количество итераций:</b>");
     ui->textBrowser_1->setHtml(ui->textBrowser_1->toHtml()  + QString::number(counter) + " ;");
+
     QTime finish = QTime::currentTime();
     double time = start_1.msecsTo(finish) / 1000.0;
 
     ui->textBrowser_1->setHtml(ui->textBrowser_1->toHtml() + "<b>Время работы:</b>");
     ui->textBrowser_1->setHtml(ui->textBrowser_1->toHtml()  + QString::number(time) + " ;");
-
 };

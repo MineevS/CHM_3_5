@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1080</width>
-    <height>978</height>
+    <height>1281</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -270,7 +270,7 @@
       <x>40</x>
       <y>510</y>
       <width>1001</width>
-      <height>411</height>
+      <height>691</height>
      </rect>
     </property>
     <property name="layoutDirection">
@@ -288,7 +288,7 @@
        <x>0</x>
        <y>0</y>
        <width>999</width>
-       <height>409</height>
+       <height>689</height>
       </rect>
      </property>
      <widget class="QTextBrowser" name="textBrowser_1">
@@ -297,7 +297,7 @@
         <x>0</x>
         <y>0</y>
         <width>1001</width>
-        <height>411</height>
+        <height>691</height>
        </rect>
       </property>
      </widget>

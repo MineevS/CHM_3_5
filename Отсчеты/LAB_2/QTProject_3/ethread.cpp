@@ -37,7 +37,7 @@ void EThread::run()
 {
     switch(index)
     {
-    case(1):
+    case(1)://thread 1:
             for(size_t j = 0; j < mw.GetORD(); j++)
             {
                 //if(j < 2) Resume();
@@ -78,7 +78,7 @@ void EThread::run()
                 Pause();
              }
         break;
-    case(2):
+    case(2)://thread 2:
         for(size_t i = 0; i < mw.GetORD(); i++)
         {
             //if(i < 2) Resume();
